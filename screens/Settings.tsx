@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Button, Text, Settings } from 'react-native';
+import { View, Button, Text } from 'react-native';
 
-const Page2 = () => (
+const Settings = () => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>About</Text>
+    <Text>Configurações</Text>
   </View>
 );
 
-Page2.navigationOptions = {
+Settings.navigationOptions = {
   title: 'About',
 }
 
