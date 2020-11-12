@@ -85,38 +85,44 @@ function HomeScreen({ navigation }) {
           
         </CardContent>
         {/* <CardContent text="Clifton, Western Cape" /> */}
+
         <CardAction 
           style={{flex: 1, justifyContent: 'flex-end', marginRight: 12, marginBottom: 12}}
           separator={false} 
           inColumn={false}>
+          <View style={{alignItems: 'center'}}>
           <FontAwesome5 
             name="check-circle" 
             color={'black'} 
-            size={45}
+            size={50} 
             // onPress={() => navigation.navigate('Settings')}  
           />
+          <Text style={{fontSize: 12}}>Concluir Medicações</Text>
+
+        </View>
         </CardAction>
       </Card>
 
       {/*FIM CARD MEDICAÇÕES DO DIA */}
 
-
-      {/* {separator()}
- 
-      <Card style={styles.userCard}>
-        <Text style={styles.title}>Dicas/Sugestões</Text>
-        <Text>Blablabla...</Text>
-      </Card>
+      {separator()}
+      
+      <View style={{flex: 1, justifyContent:'flex-end', width: '100%'}}>
+        <Text style={{  ...styles.title, marginStart: '10%'}}>Dicas/Sugestões</Text>
+      </View>
 
       {separator()}
- 
-      <Card style={styles.userCard}>
-        <Text style={styles.title}>Dicas/Sugestões</Text>
-        <Text>Blablabla...</Text>
-      </Card> */}
- 
-      {separator()}
-
+      
+      {
+        [1,2,3,4,5,6,7,8,9].map((item) => {
+          return (
+            <View style={{flex: 1, justifyContent:'flex-end', width: '100%', paddingBottom: 10}}>
+              <Text style={{ ...styles.title, marginStart: '10%'}}>Titulo</Text>
+              <Text style={{ marginStart: '10%'}}>{` Descrição da dica ${item}`}</Text>
+            </View>
+          )
+        })
+      }
 
     </View>
       </ScrollView>
@@ -200,6 +206,6 @@ const styles = StyleSheet.create({
   separator: {
     marginVertical: 10,
     height: 1,
-    width: '85%',
+    width: '100%',
   },
 });

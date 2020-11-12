@@ -28,14 +28,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import Initial from './screens/Home'
+import Medication from './screens/Medication'
+import History from './screens/History'
+import Statistics from './screens/Statistics'
+import ScheduleAdjustment from './screens/ScheduleAdjustment'
 
-function Feed() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Feed!</Text>
-    </View>
-  );
-}
+
 
 function Profile() {
   return (
@@ -76,7 +74,7 @@ function MyTabs() {
       />
       <Tab.Screen
         name="medication"
-        component={Notifications}
+        component={Medication}
         options={{
           tabBarLabel: 'Medicações',
           tabBarIcon: ({ color, size }) => (
@@ -86,7 +84,7 @@ function MyTabs() {
       />
       <Tab.Screen
         name="statistics"
-        component={Profile}
+        component={Statistics}
         options={{
           tabBarLabel: 'Estatísticas',
           tabBarIcon: ({ color, size }) => (
@@ -96,7 +94,7 @@ function MyTabs() {
       />
       <Tab.Screen
         name="dailyAdjustments"
-        component={Notifications}
+        component={ScheduleAdjustment}
         options={{
           tabBarLabel: 'Ajustar Horário',
           tabBarIcon: ({ color, size }) => (
@@ -106,7 +104,7 @@ function MyTabs() {
       />
       <Tab.Screen
         name="history"
-        component={Profile}
+        component={History}
         options={{
           tabBarLabel: 'Histórico',
           tabBarIcon: ({ color, size }) => (
