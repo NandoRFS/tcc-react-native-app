@@ -34,23 +34,6 @@ import Statistics from './screens/Statistics'
 import ScheduleAdjustment from './screens/ScheduleAdjustment'
 
 
-
-function Profile() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Profile!</Text>
-    </View>
-  );
-}
-
-function Notifications() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Notifications!</Text>
-    </View>
-  );
-}
-
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
@@ -96,7 +79,7 @@ function MyTabs() {
         name="dailyAdjustments"
         component={ScheduleAdjustment}
         options={{
-          tabBarLabel: 'Ajustar Horário',
+          tabBarLabel: 'Gerenciar Horários',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5 name="clock" color={color} size={size} />
           ),

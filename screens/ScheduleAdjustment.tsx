@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, TextInput  } from 'react-native';
+import { Alert, Button, StyleSheet, TextInput, Dimensions } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -17,21 +17,26 @@ const separator = () => (
 )
 
 
+
 export default function ScheduleAdjustment() {
-  const [value, onChangeText] = React.useState("");
+  const [text, setText] = React.useState('');
+  const [textHour, setTextHour] = React.useState('');
+  
   const aux = (text: any) => {
-    let final = null
-    onChangeText("") 
-    console.log(text.length)
-    if(text.length > 3) {
-      final = `${text[0]}${text[1]}:${text[2]}${text[3]}`
-      console.log(value, final)
-      onChangeText(final) 
-    } else {
-      onChangeText(text) 
+    var v = text;
+    if (v.match(/^\d{2}$/) !== null) {
+      setText(v + '/');
+    } else if (v.match(/^\d{2}\/\d{2}$/) !== null) {
+      setText(v + '/');
     }
   }
-  let dated, datetime, hour, min
+
+  const auxHour = (text: any) => {
+    var v = text;
+    if (v.match(/^\d{2}$/) !== null)
+      setTextHour(v + ':')
+  }
+  
   return (
     <View style={{flex: 1,paddingTop: Constants.statusBarHeight, width: '100%'}}>
       
@@ -40,37 +45,84 @@ export default function ScheduleAdjustment() {
             <FontAwesome5 name="clock" color={'black'} size={50} />
 
             <Text style={{...styles.title, ...styles.userName}}>
-                Ajuste de horário
+                Gerenciar Horários
             </Text>
             
           </View>
 
           {separator()}
-          
           </View>
+
+          {/* AJUSTE DATA */}
           <View style={styles.container}>
-          <Input
-   placeholder="Comment"
-   leftIcon={{ type: 'font-awesome', name: 'comment' }}
-   onChangeText={value =>  value }
-  />
-            <Text>AAAA: </Text>
-            <TextInput
-              style={{ height: 40, borderColor: 'gray', borderWidth: 1, width: '50%' }}
-              onChangeText={text => onChangeText(text)}
-              value={value}
+            <Input
+              keyboardType="numeric"
+              placeholder="Data"
+              leftIcon={{ type: 'material-community', name: 'calendar-month' }}
+              onChangeText={text => aux(text)}
+              defaultValue={text}
+              maxLength={10}
             />
-            <TextInput
-              style={{ height: 40, borderColor: 'gray', borderWidth: 1, width: '50%' }}
-              onChangeText={text => onChangeText(text)}
-              value={value}
+
+            <Input
+              keyboardType="numeric"
+              placeholder="Hora"
+              leftIcon={{ type: 'material-community', name: 'clock-outline' }}
+              onChangeText={text => auxHour(text)}
+              defaultValue={textHour}
+              maxLength={5}
             />
+            <View style={{flexDirection: 'row', justifyContent: 'flex-end', marginRight: 10}}>
+              <View style={{marginRight: 10}}>
+                <Button
+                    color="grey"
+                    title="Cancelar"
+                    onPress={() => Alert.alert('Simple Button pressed')}
+                  />
+              </View>
+              
+              <View>
+                <Button
+                  color="#84CED1"
+                  title="Salvar"
+                  onPress={() => Alert.alert('Simple Button pressed')}
+                />
+              </View>
+              
+            </View>
             
+            </View>
+
+          {/* FIM AJUSTE DATA */}
+
+        {separator()}
+        <View style={{flexDirection: 'row'}}>
+          <View style={{ justifyContent: 'flex-start', width:'60%'}}>
+            <Text style={{ ...styles.title, marginStart: 10}}>Últimas marcações: </Text>
           </View>
+        </View>
         {separator()}
 
+        <ScrollView>
+            {
+              [0,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5].map((item, i) => {
+                const cellColor = i%2? '#e6f2ea' : 'white'
+                return (
+                  <View style={{flexDirection: 'row', margin: 5}}>
+                    <View style={{backgroundColor: cellColor, justifyContent: 'flex-start', width:'60%'}}>
+                      <Text style={{ ...styles.title, marginStart: 10}}>00/00/0000 HH:mm</Text>
+                    </View>
+                    <View style={{backgroundColor: cellColor, justifyContent: 'flex-end', width:'40%'}}>
+                      <FontAwesome5 style={{marginTop: -2, alignSelf:'flex-end', marginRight: 10}} name="pen" color={'black'} size={20} />
+                    </View>
+                  </View>
+                  
+                )
+              })
+            }
+          
 
-          <ScrollView>
+
 
 
       </ScrollView>
@@ -80,7 +132,6 @@ export default function ScheduleAdjustment() {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     justifyContent: 'center',
   },
   userCardContainer: {

@@ -143,6 +143,7 @@ export default function SettingsStackScreen() {
           headerShown: false
         }}
         name="Home"
+        key="homeScreen"
         component={HomeScreen} 
       />
       <SettingsStack.Screen 
