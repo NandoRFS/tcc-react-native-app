@@ -23,19 +23,18 @@
 // }
 
 import * as React from 'react';
-import AppLogin from './screens/AppLogin'
 import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
-import Initial from './screens/Home'
-import Medication from './screens/Medication'
-import History from './screens/History'
-import Statistics from './screens/Statistics'
-import ScheduleAdjustment from './screens/ScheduleAdjustment'
+import Initial from './Home'
+import Medication from './Medication'
+import History from './History'
+import Statistics from './Statistics'
+import ScheduleAdjustment from './ScheduleAdjustment'
 
 import axios from 'axios';
-import { goForAxios, signIn }  from './services/auth'
+import { goForAxios, signIn }  from '../services/auth'
 
 const Tab = createBottomTabNavigator();
 
@@ -102,45 +101,9 @@ function MyTabs() {
   );
 }
 
-const onLoginPress = async () => {
-
-  // this.props.spinnerFunction();
-  // let data = await this.login();
-  // if (!data.hasError) {
-  //     await AsyncStorage.setItem('user', JSON.stringify(data.object.object));
-  //     await AsyncStorage.setItem('token', data.object.accessToken);
-  //     this.props.navigation.navigate('Home');
-  // } else {
-  //     showMessage({
-  //         message: "Usuário ou Senha Incorretos",
-  //         type: "danger",
-  //         floating: true,
-  //         textStyle: {
-  //             textAlign: 'center'
-  //         }
-  //     });
-  // }
-}
-
-const login = async () => {
-  try {
-    let response = await fetch(
-      'https://reactnative.dev/movies.json'
-    );
-    let json = await response.json();
-    console.log(json.movies)
-    return json.movies;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 export default function App() {
-  // console.log(x++)
-  
+  console.log('authenticated')
   return (
-    <NavigationContainer>
-      <AppLogin/>
-    </NavigationContainer>
+    <MyTabs />
   );
 }
