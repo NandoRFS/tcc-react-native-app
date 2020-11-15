@@ -20,7 +20,7 @@ export async function signIn2(user) {
         let resp = await axios.post(`${apiUrl}/authenticate`, {cpf: user.cpf, password: user.password})
         SyncStorage.set('user', JSON.stringify(resp.data.user));
 
-        SyncStorage.set('token', JSON.stringify(resp.data.token));
+        SyncStorage.set('token', resp.data.token);
 
         return true
     } catch(e) {

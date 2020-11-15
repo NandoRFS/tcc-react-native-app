@@ -1,76 +1,111 @@
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import Constants from "expo-constants";
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards'
 import { ScrollView } from 'react-native';
+import moment from 'moment'
+
+import * as historyService from '../services/history'
 
 const separator = () => (
     <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
 )
 
-export default function History() {
-  return (
-    <View style={{flex: 1,paddingTop: Constants.statusBarHeight}}>
-      <ScrollView>
-        <View style={styles.container}>
-            <View style={styles.userCardContainer}>
-            <MaterialCommunityIcons name="history" color={'black'} size={50} />
 
-            <Text style={{...styles.title, ...styles.userName}}>
-                Histórico de Retiradas
-            </Text>
-            
-          </View>
-
-          {separator()}
-
-          <View style={styles.userCardContainer}>        
-            <View style={styles.viewCalendarMedicated}>
-              <Text style={styles.title}>Próxima Retirada</Text>
-              <Text style={{fontSize: 40, color: 'gray'}}>25/12</Text>
-            </View>
-
-            <View style={{...styles.calendarMedicated, alignItems: 'center'}}>
-              <FontAwesome5 
-                name="calendar-times" 
-                color={'black'} 
-                size={50} 
-                // onPress={() => navigation.navigate('Settings')}  
-              />
-              <Text style={{fontSize: 12}}>Medicou-se Hoje</Text>
-
-            </View>
-          </View>
-
-          {separator()}
-          
-          <View style={{flex: 1, justifyContent:'flex-end', width: '100%'}}>
-            <Text style={{  ...styles.title, marginStart: '10%'}}>Últimas Retiradas</Text>
-          </View>
-
-          {separator()}
-          
-          {
-            [0,1,2,3,4,5].map(item => {
-              return (
-                <View style={{flex: 1, justifyContent:'flex-end', width: '100%', paddingBottom: 10}}>
-                  <Text style={{ ...styles.title, marginStart: '10%'}}>00/00/0000 HH:mm</Text>
-                  <Text style={{ marginStart: '10%'}}>{` Descrição da dica ${item}`}</Text>
-                </View>
-              )
-            })
-          }
-          
-          </View>
-      </ScrollView>
-    </View>
-  );
+const regPassword = async function () {
+  const [medication, setMedication] = React.useState([]);
+  
+    return historyService.getHistory().then(x => {
+      setMedication(x)
+    }).then(e => medication)
 }
+
+
+
+export default class History extends React.Component {
+  state = {
+    medication: [],
+    lastMedicine: {}
+  }
+
+  componentDidMount() {
+    historyService.getHistory().then(x => {
+      this.setState({medication: x})
+    })
+    historyService.getLastPick().then(x => {
+      this.setState({lastMedicine: x.schedule_date})
+    })
+  }
+
+  render() {
+
+    return (
+      <View style={{flex: 1,paddingTop: Constants.statusBarHeight}}>
+        <ScrollView>
+          <View style={styles.container}>
+              <View style={styles.userCardContainer}>
+              <MaterialCommunityIcons name="history" color={'black'} size={50} />
+  
+              <Text style={{...styles.title, ...styles.userName}}>
+                  Histórico de Retiradas
+              </Text>
+              
+            </View>
+  
+            {separator()}
+  
+            <View style={styles.userCardContainer}>        
+              <View style={styles.viewCalendarMedicated}>
+                <Text style={styles.title}>Próxima Retirada</Text>
+                <Text style={{fontSize: 40, color: 'gray'}}>{moment(this.state.lastMedicine).utc().format('DD/MM')}</Text>
+              </View>
+  
+              <View style={{...styles.calendarMedicated, alignItems: 'center'}}>
+                <FontAwesome5 
+                  name="hourglass-half" 
+                  color={'black'} 
+                  size={50} 
+                  // onPress={() => navigation.navigate('Settings')}  
+                />
+  
+              </View>
+            </View>
+  
+            {separator()}
+            
+            <View style={{flex: 1, justifyContent:'flex-end', width: '100%'}}>
+              <Text style={{  ...styles.title, marginStart: '10%'}}>Últimas Retiradas</Text>
+            </View>
+  
+            {separator()}
+            
+            {
+              this.state.medication.map((item: any) => {
+                console.log(String(item.pick_date))
+                return (
+                  <View style={{flex: 1, justifyContent:'flex-end', width: '100%', paddingBottom: 10}}>
+                    <Text style={{ ...styles.title, marginStart: '10%'}}>
+                      <FontAwesome5 name="circle" 
+                        color={'black'} 
+                        size={18}
+                      />
+                        {" " + moment(item.pick_date).utc().format('DD/MM/YYYY')}
+                    </Text>
+                  </View>
+                )
+              })
+            }
+            
+            </View>
+        </ScrollView>
+      </View>
+    );
+  }
+}
+
 
 const styles = StyleSheet.create({
   container: {
