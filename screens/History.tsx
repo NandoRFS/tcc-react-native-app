@@ -63,13 +63,11 @@ export default class History extends React.Component {
                 <Text style={{fontSize: 40, color: 'gray'}}>{moment(this.state.lastMedicine).utc().format('DD/MM/YY')}</Text>
               </View>
   
-  
               <View style={{...styles.calendarMedicated, alignItems: 'center'}}>
                 <FontAwesome5 
                   name="hourglass-half" 
                   color={'black'} 
                   size={50} 
-                  style={{transform: [{rotateY: '180deg'}]}}
                   // onPress={() => navigation.navigate('Settings')}  
                 />
   
