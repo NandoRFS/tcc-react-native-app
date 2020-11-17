@@ -10,7 +10,6 @@ export async function signIn(cpf: any) {
         SyncStorage.set('user', JSON.stringify(resp.data.user?.user?._id));
         return resp.data.user?.user?.passwordRegistered ? true : false
     } catch(e) {
-        console.log('throw')
         throw false
     }
 }
@@ -24,20 +23,17 @@ export async function signIn2(user) {
 
         return true
     } catch(e) {
-        console.log('throw2')
         throw false
     }
 }
 
 export async function registerPassword(id: any, password: any) {
-    console.log('{password, passwordRegistered: true}: ',  {password, passwordRegistered: true})
     try {
         let resp = await axios.post(`${apiUrl}/register/${id}`, {password, passwordRegistered: true})
         console.log(resp.data)
 
         return true
     } catch(e) {
-        console.log('aqui')
         throw false
     }
 }

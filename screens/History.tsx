@@ -60,14 +60,16 @@ export default class History extends React.Component {
             <View style={styles.userCardContainer}>        
               <View style={styles.viewCalendarMedicated}>
                 <Text style={styles.title}>Próxima Retirada</Text>
-                <Text style={{fontSize: 40, color: 'gray'}}>{moment(this.state.lastMedicine).utc().format('DD/MM')}</Text>
+                <Text style={{fontSize: 40, color: 'gray'}}>{moment(this.state.lastMedicine).utc().format('DD/MM/YY')}</Text>
               </View>
+  
   
               <View style={{...styles.calendarMedicated, alignItems: 'center'}}>
                 <FontAwesome5 
                   name="hourglass-half" 
                   color={'black'} 
                   size={50} 
+                  style={{transform: [{rotateY: '180deg'}]}}
                   // onPress={() => navigation.navigate('Settings')}  
                 />
   
@@ -83,10 +85,10 @@ export default class History extends React.Component {
             {separator()}
             
             {
-              this.state.medication.map((item: any) => {
-                console.log(String(item.pick_date))
+              this.state.medication.map((item: any, i) => {
+                const cellColor = i%2? 'white' : '#e6f2ea'
                 return (
-                  <View style={{flex: 1, justifyContent:'flex-end', width: '100%', paddingBottom: 10}}>
+                  <View style={{backgroundColor: cellColor, flex: 1, justifyContent:'flex-end', width: '100%', paddingBottom: 5, paddingTop: 5}}>
                     <Text style={{ ...styles.title, marginStart: '10%'}}>
                       <FontAwesome5 name="circle" 
                         color={'black'} 

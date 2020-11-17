@@ -81,7 +81,7 @@ function MyTabs() {
         name="dailyAdjustments"
         component={ScheduleAdjustment}
         options={{
-          tabBarLabel: 'Gerenciar Horários',
+          tabBarLabel: 'Últimas marcações',
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5 name="clock" color={color} size={size} />
           ),
@@ -91,7 +91,7 @@ function MyTabs() {
         name="history"
         component={History}
         options={{
-          tabBarLabel: 'Histórico',
+          tabBarLabel: 'Histórico Retiradas',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="history" color={color} size={size} />
           ),

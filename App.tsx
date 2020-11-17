@@ -122,18 +122,6 @@ const onLoginPress = async () => {
   // }
 }
 
-const login = async () => {
-  try {
-    let response = await fetch(
-      'https://reactnative.dev/movies.json'
-    );
-    let json = await response.json();
-    console.log(json.movies)
-    return json.movies;
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 export default function App() {
   // console.log(x++)

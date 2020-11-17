@@ -15,7 +15,6 @@ const SettingsStack = createStackNavigator();
 let cpf, password;
 
 const auth = async function (nav: any, text: any) {
-    console.log('text', text)
     
     try {
         let x = await signIn(text)
@@ -30,13 +29,10 @@ const auth = async function (nav: any, text: any) {
         Keyboard.dismiss()
     }  catch(e) {
       Alert.alert('Oops!', 'Usuário não encontrado!')
-        console.log('Não deu boa')
-
     }
 }
 
 const auth2 = async function (nav: any, text: any) {
-  console.log('text', text)
   
   try {
     password = text
@@ -49,27 +45,23 @@ const auth2 = async function (nav: any, text: any) {
   }  catch(e) {
     Alert.alert('Oops!', 'Senha incorreta!')
     // Adicionar opção esqueci mimnha senha
-      console.log('Não deu boa', text)
 
   }
 }
 
 const regPassword = async function (nav: any, text: any) {
-  console.log('text', text)
   
   try {
     password = text
     let user = JSON.parse(SyncStorage.get('user'))
-    console.log('user', user)
-      let x = await registerPassword(user, password)
+    let x = await registerPassword(user, password)
 
-      Keyboard.dismiss()
+    Keyboard.dismiss()
 
-      nav.navigate('LoginPassword')
+    nav.navigate('LoginPassword')
   }  catch(e) {
     Alert.alert('Oops!', 'Senha incorreta!')
     // Adicionar opção esqueci mimnha senha
-      console.log('Não deu boa', text)
 
   }
 }

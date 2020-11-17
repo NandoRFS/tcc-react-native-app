@@ -5,7 +5,6 @@ import {get} from './axios'
 
 export async function getHistory() {
     const user = JSON.parse(SyncStorage.get('user'))
-    console.log('user: ', user._id)
     try {
         let { patient } = await get(`/patient/user/${user._id}`)
         patient.medication = patient.medication.map(m => {
@@ -14,18 +13,15 @@ export async function getHistory() {
         })
         const sorted= patient.medication.slice().sort((a: any, b: any) => b.pick_date - a.pick_date)
 
-        console.log('sorted', sorted)
 
         return sorted
     } catch(e) {
-        console.log('ERROU :(')
         throw false
     }
 }
 
 export async function getLastPick() {
     const user = JSON.parse(SyncStorage.get('user'))
-    console.log('user: ', user._id)
     try {
         let { patient } = await get(`/patient/user/${user._id}`)
         patient.medication = patient.medication.map(m => {
@@ -33,14 +29,47 @@ export async function getLastPick() {
             return m
         })
         patient.medication = patient.medication.filter(m => m.last_pick==true)
-        console.log('patient.medication', patient.medication)
         const sorted= patient.medication.slice().sort((a: any, b: any) => b.schedule_date - a.schedule_date).reverse()
         
-        console.log('sorted', sorted)
 
         return sorted[0]
     } catch(e) {
-        console.log('ERROU :(')
+        throw false
+    }
+}
+
+export async function getLastMedication() {
+    const user = JSON.parse(SyncStorage.get('user'))
+    try {
+        let { patient } = await get(`/patient/user/${user._id}`)
+
+
+        let sorted = []
+        for (let m of patient.medication) {
+            if(m.last_pick==true) {
+                let { medication } = await get(`/medication/${m.medication_id}`)
+                m.medicationObj = medication
+            }
+
+            sorted.push(m)
+        }
+
+        let result = []
+        
+        for(let med of sorted) {
+            for(let t of med.treatment) {
+                if(t.medicated) {
+                    t.medName = med.medicationObj?.name
+                    result.push(t)
+                }
+            }
+            
+        }
+
+        console.log('result', result)
+
+        return result
+    } catch(e) {
         throw false
     }
 }

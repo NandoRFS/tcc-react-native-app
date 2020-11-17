@@ -17,7 +17,7 @@ const separator = () => (
 const cardMedication = (title: any, description: any, link: any) => (
 
 
-    <Card style={{width: '87%'}}>
+    <Card style={{width: '90%', backgroundColor: '#eaf2ed'}}>
             <CardTitle
               style={{marginTop: -15}}
               title={<Text style={{...styles.title}}>{title}</Text>}
@@ -32,7 +32,7 @@ const cardMedication = (title: any, description: any, link: any) => (
               style={{flex: 1, justifyContent: 'flex-end', marginTop: -20, marginRight: 12, marginBottom: 12}}
               separator={false} 
               inColumn={false}>
-              <View style={{alignItems: 'center'}}>
+              <View style={{alignItems: 'center', borderRadius: 8, padding: 6, borderWidth: 1}}>
               <Ionicons 
                 name="md-open" 
                 color={'black'} 

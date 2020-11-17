@@ -17,15 +17,14 @@ import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 
 import * as tipService from '../services/tip'
 import * as historyService from '../services/history'
 import * as medicationService from '../services/medication'
+import * as patientService from '../services/patient'
 
 import moment from 'moment';
+import { Button } from 'react-native-elements';
 
 const separator = () => (
   <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
 )
-
-
-
 
 const SettingsStack = createStackNavigator();
 
@@ -34,7 +33,9 @@ export default class SettingsStackScreen extends React.Component {
     tips: [],
     lastMedicine: {},
     dailyMedication: [],
-    treatment: []
+    treatment: [],
+    initTreatment: false,
+    afterMedicated: false
   }
 
   componentDidMount() {
@@ -44,13 +45,30 @@ export default class SettingsStackScreen extends React.Component {
     historyService.getLastPick().then(x => {
       this.setState({lastMedicine: x.schedule_date})
     })
-    medicationService.getTreatment().then(x => {
-      console.log('treatment: ', x)
-      this.setState({treatment: x})
-    })
     medicationService.getDailyMedication().then(x => {
       this.setState({dailyMedication: x})
     })
+    medicationService.getTreatment().then(x => {
+      this.setState({treatment: x})
+      this.setState({afterMedicated: medicationService.isMedicated(this.state.treatment)})
+    })
+  }
+
+  saveMedicine(initTreatment: any) {
+
+    console.log('EBA, initTreatment: ', initTreatment)
+    if(!initTreatment) {
+      console.log('EBA1')
+      medicationService.updateTreatment(true).then(() => {
+        this.setState({afterMedicated: true})
+      })
+      this.setState({initTreatment: true})
+    } else {
+      console.log('EBA2')
+      medicationService.updateTreatment(false).then(() => {
+        this.setState({afterMedicated: true})
+      })
+    }
   }
 
   HomeScreen({ navigation }) {
@@ -70,89 +88,127 @@ export default class SettingsStackScreen extends React.Component {
           <MaterialCommunityIcons name="account-circle" color={'black'} size={70} />
           
           <Text style={{...styles.title, ...styles.userName}}>
-            Nome Do Usuário
+            {patientService.getUser().name}
           </Text>
           
         </View>
   
+
         {separator()}
   
         <View style={styles.userCardContainer}>        
           <View style={styles.viewCalendarMedicated}>
             <Text style={styles.title}>Próxima Retirada</Text>
-            <Text style={{fontSize: 40, color: 'gray'}}>{moment(this.state.lastMedicine).utc().format('DD/MM')}</Text>
+            <Text style={{fontSize: 40, color: 'gray'}}>{moment(this.state.lastMedicine).utc().format('DD/MM/YY')}</Text>
           </View>
   
-          <View style={{...styles.calendarMedicated, alignItems: 'center'}}>
-            <FontAwesome5 
-              name="calendar-times" 
-              color={'black'} 
-              size={50} 
-              // onPress={() => navigation.navigate('Settings')}  
-            />
-            <Text style={{fontSize: 12}}>Medicou-se Hoje</Text>
-  
-          </View>
+
+          {
+                medicationService.isMedicated(this.state.treatment) && this.state.afterMedicated &&
+                <View style={{...styles.calendarMedicated, alignItems: 'center'}}>
+                  <FontAwesome5 
+                    name="calendar-check" 
+                    color={'green'} 
+                    size={50} 
+                    // onPress={() => navigation.navigate('Settings')}  
+                  />
+                  <Text style={{fontSize: 12}}>medicou-se hoje</Text>
+      
+                </View>
+              }
+              {
+                !medicationService.isMedicated(this.state.treatment) && !this.state.afterMedicated &&
+                <View style={{...styles.calendarMedicated, alignItems: 'center'}}>
+                  <FontAwesome5 
+                    name="calendar-times" 
+                    color={'red'}
+                    size={50} 
+                    // onPress={() => navigation.navigate('Settings')}  
+                  />
+                  <Text style={{fontSize: 12}}>Medicou-se hoje</Text>
+      
+                </View>
+            }
+            
         </View>
   
         {separator()}
+
         {/* CARD MEDICAÇÕES DO DIA */}
   
-        <Card style={{width: '87%'}}>
+        <Card style={{width: '87%', backgroundColor: '#89C5C6'}}>
           <CardTitle
-            title={<Text style={styles.title}>Medicações do dia</Text>}
+            title={<Text style={{...styles.title, color: 'white'}}>Medicações do dia</Text>}
             subtitleAbove={true}
           />
           <CardContent>
             {
               this.state.treatment?.length > 0 ?
-              this.state.treatment.map(item => {
-                console.log('item1111', item)
+              this.state.treatment.map((item: any) => {
                 return (
-                  <Text>
+                  <Text style={{color: 'white'}} onPress={() =>{ console.log('ali', item)}}>
                     <FontAwesome5 
                     name="chevron-circle-right" 
-                    color={'black'} 
-                    size={12}
-                    // onPress={() => navigation.navigate('Settings')}  
+                    color={'white'} 
+                    size={14}
+                      
                   />
-                    {` Remédio ${item}`}
+                    {` ${item.medicationObj?.name} (${item.dose})`}
                   </Text>
                 )
-              })
-              : this.state.dailyMedication.map((item: any) => {
-                console.log('item2323', item)
-                return (
-                  <Text>
-                    <FontAwesome5 
-                    name="chevron-circle-right" 
-                    color={'black'} 
-                    size={12}
-                    // onPress={() => navigation.navigate('Settings')}  
-                  />
-                    {"  " + `${item.medication_id?.name} (${item.dose})`}
-                  </Text>
-                )
-              })
+              }, this)
+              : 
+              (
+                this.state.dailyMedication.map((item: any) => {
+                  return (
+                    <Text>
+                      <FontAwesome5 
+                      name="chevron-circle-right" 
+                      color={'black'} 
+                      size={12}
+                      />
+                      {"  " + `${item.medicationObj?.name} (${item.dose})`}
+                    </Text>
+                  )
+                }, this)
+              )
             }
             
           </CardContent>
           {/* <CardContent text="Clifton, Western Cape" /> */}
-  
           <CardAction 
             style={{flex: 1, justifyContent: 'flex-end', marginRight: 12, marginBottom: 12}}
             separator={false} 
             inColumn={false}>
-            <View style={{alignItems: 'center'}}>
-            <FontAwesome5 
-              name="check-circle" 
-              color={'black'} 
-              size={50} 
-              // onPress={() => navigation.navigate('Settings')}  
-            />
-            <Text style={{fontSize: 12}}>Concluir Medicações</Text>
+              {
+                !medicationService.isMedicated(this.state.treatment) && !this.state.afterMedicated &&
+                <Button
+                buttonStyle={{borderRadius: 8}}
+                linearGradientProps={{
+                  colors: ['#eaf2ed', '#eaf2ed'],
+                  start: { x: 0, y: 0.9 },
+                  end: { x: 1, y: 0.2 }
+                }}
+                  icon={<FontAwesome5 
+                    name="check-circle" 
+                    color={'black'} 
+                    size={30} 
+                  />}
+                  onPress={() => this.saveMedicine((this.state.treatment?.length > 0))}  
+                  title={<Text>{" Concluir Medicação"}</Text>}
+                />
+                // <View style={{alignItems: 'center'}}>
+                //   <FontAwesome5 
+                //     name="check-circle" 
+                //     color={'black'} 
+                //     size={50} 
+                //     onPress={() => this.saveMedicine((this.state.treatment?.length > 0))}  
+                //   />
+                //   <Text style={{fontSize: 12}}>Concluir Medicações</Text>
+                // </View>
+            }
+            
   
-          </View>
           </CardAction>
         </Card>
   
@@ -169,10 +225,15 @@ export default class SettingsStackScreen extends React.Component {
         {
           this.state.tips.map((item: any) => {
             return (
-              <View style={{flex: 1, justifyContent:'flex-end', width: '100%', paddingBottom: 10}}>
-                <Text style={{ ...styles.title, marginStart: '10%'}}>{item.title}</Text>
-                <Text style={{ marginStart: '10%'}}>{item.description}</Text>
-              </View>
+              <Card style={{width: '90%', backgroundColor: '#eaf2ed'}}>
+                <CardTitle
+                  title={<Text style={{ ...styles.title, marginStart: '10%'}}>{item.title}</Text>}
+                  subtitleAbove={true}
+                />
+                <CardContent>
+                  <Text>{item.description}</Text>
+                </CardContent>
+              </Card>
             )
           })
         }
