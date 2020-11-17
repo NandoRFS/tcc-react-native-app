@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Keyboard, Image } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+// import { Image } from 'react-native-elements';
 import AppAuth from './AppAuth'
 import Axios from 'axios';
 import { Input } from 'react-native-elements';
@@ -82,7 +82,14 @@ export default class App extends React.Component {
 
     return (
         <View style={styles.container}>
-          <Text style={styles.logo}>LOGIN</Text>
+
+          
+          <Image
+            source={require('../assets/images/Logo.png')}
+            style={{marginTop: 20, marginBottom: 60}}
+          />
+
+
           <View style={styles.inputView} >
           <Input
               keyboardType="default"
@@ -118,7 +125,10 @@ export default class App extends React.Component {
 
     return (
         <View style={styles.container}>
-          <Text style={styles.logo}>LOGIN</Text>
+          <Image
+            source={require('../assets/images/Logo.png')}
+            style={{marginTop: 20, marginBottom: 40}}
+          />
           <Text style={{fontSize: 18, marginBottom: 10}}>Primeiro acesso! Crie sua senha</Text>
           <View style={styles.inputView} >
           <Input
@@ -164,7 +174,10 @@ export default class App extends React.Component {
 
     return (
         <View style={styles.container}>
-          <Text style={styles.logo}>LOGIN</Text>
+          <Image
+            source={require('../assets/images/Logo.png')}
+            style={{marginTop: 20, marginBottom: 60}}
+          />
           <View style={styles.inputView} >
           <Input
               keyboardType="numeric"
@@ -243,9 +256,9 @@ const styles = StyleSheet.create({
   },
   logo:{
     fontWeight:"bold",
-    fontSize:50,
+    fontSize:40,
     color:"#8BC4BE",
-    marginBottom:40
+    marginBottom:10
   },
   inputView:{
     width:"80%",
